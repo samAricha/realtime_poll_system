@@ -16,6 +16,27 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
+    },
+    {
+      path: '/login',
+      name: 'Home',
+      component: () => import('../views/Login.vue')
+    },
+    {
+      path: '/signup',
+      name: 'Home',
+      component: () => import('../views/Signup.vue')
+    },
+    {
+      path: '/public-polls',
+      name: 'public-polls',
+      component: () => import('../views/PublicPolls.vue')
+    },
+    {
+      path: '/create-poll',
+      name: 'create-poll',
+      component: () => import('../views/CreatePoll.vue'),
+      meta: {requiresAuth: true}
     }
   ]
 })
