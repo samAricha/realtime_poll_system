@@ -18,7 +18,9 @@ import {RouterLink} from "vue-router";
 
           <div class="sm:p-3 space-y-2">
             <p class="mb-3">Sign up and enjoy the Fast Poll app</p>
-            <RouterLink to="/create-poll" > <button class="bg-[#4ad97d] text-white rounded-xl p-2 w-full">Create Poll</button></RouterLink>
+            <RouterLink to="/create-poll" >
+              <button class="bg-[#4ad97d] text-white rounded-xl p-2 w-full">Create Poll</button>
+            </RouterLink>
           </div>
         </div>
       </div>
