@@ -2,7 +2,9 @@
 import { auth } from "@/firebaseConfig";
 import {useRouter} from "vue-router";
 import { createUserWithEmailAndPassword,
-signInWithPopup} from "firebase/auth";
+  signInWithPopup,
+  GoogleAuthProvider,
+  GithubAuthProvider} from "firebase/auth";
 import {ref} from "vue";
 
 
@@ -13,6 +15,8 @@ const formDetails = ref({
 })
 
 const router = useRouter()
+const googleProvider = new GoogleAuthProvider()
+const githubProvider = new GithubAuthProvider()
 
 
 //methods
@@ -50,11 +54,14 @@ const registerUserWithEmailPasswd = () => {
 
 //sign-up with google
 const googleSignIn = () => {
-  signInWithPopup(auth, provider)
-      .then(() => {
+  signInWithPopup(auth, googleProvider)
+      .then((user) => {
+
+        alert(user+" registered")
         router.push({
           path: '/create-poll'
         })
+
       })
       .catch(error => {
         console.log(error.message)
@@ -62,7 +69,21 @@ const googleSignIn = () => {
 }
 
 //sign-pu with github
-//sign-pu with twitter
+const githubSignIn = () => {
+  signInWithPopup(auth, githubProvider)
+      .then(() => {
+
+        router.push({
+          path: '/create-poll'
+        })
+
+      })
+      .catch(error => {
+        console.log(error.message)
+      })
+}
+
+//sign-up with twitter
 
 
 
@@ -104,35 +125,41 @@ const googleSignIn = () => {
                  class="w-full focus:outline-none p-2 border
                   border-gray-408 rounded-md focus:ring-1 ring-primary focus:border-0">
         </div>
+
           <button type="submit"
                   class="w-full bg-primary p-1 px-3 rounded-md text-white">
             Sign up
           </button>
+
         <div>
+
           <div class="flex items-center space-x-2">
             <div class="w-full h-[2px] bg-gray-300"></div>
             <p class="shrink-0">Or Continue with</p>
             <div class="w-full h-[2px] bg-gray-300"></div>
           </div>
+
           <div class="flex items-center justify-evenly my-5">
             <div @click="googleSignIn" class="flex items-center
               space-x-2
               border border-gray-400 p-3 rounded-md
-              justify-center">
+              justify-center cursor-pointer">
               <FontAwesomeIcon :icon="['fab','google']" class="w-6 h-6 text-primary"/>
               <p>Google</p>
             </div>
-            <div class="flex items-center
+
+            <div @click="githubSignIn" class="flex items-center
               space-x-2
               border border-gray-400 p-3 rounded-md
-              justify-center">
+              justify-center cursor-pointer">
               <FontAwesomeIcon :icon="['fab','github']" class="w-6 h-6 text-primary"/>
               <p>GitHub</p>
             </div>
+
             <div class="flex items-center
               space-x-2
               border border-gray-400 p-3 rounded-md
-              justify-center">
+              justify-center cursor-pointer">
               <FontAwesomeIcon :icon="['fab','twitter']" class="w-6 h-6 text-primary"/>
               <p>Twitter</p>
             </div>

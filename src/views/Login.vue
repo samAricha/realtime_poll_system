@@ -1,12 +1,18 @@
 <script setup>
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import { auth } from "@/firebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  GithubAuthProvider} from "firebase/auth";
 import { ref } from "vue";
 import {useRouter} from "vue-router";
 
 //credentials
 const router = useRouter()
+const googleProvider = new GoogleAuthProvider()
+const githubProvider = new GithubAuthProvider()
+
 const formDetails = ref({
   email: '',
   password: ''
@@ -47,7 +53,34 @@ const emailPasswdLogin = () => {
 }
 
 //log-in with google
+const googleSignIn = () => {
+  signInWithPopup(auth, googleProvider)
+      .then(() => {
+        router.push({
+          path: '/create-poll'
+        })
+      })
+      .catch(error => {
+        console.log(error.message)
+      })
+}
+
+
 //log-in with github
+const githubSignIn = () => {
+  signInWithPopup(auth, githubProvider)
+      .then((user) => {
+        console.log(user)
+        router.push({
+          path: '/create-poll'
+        })
+      })
+      .catch(error => {
+        console.log(error.message)
+      })
+}
+
+
 //log-in with twitter
 
 
@@ -88,22 +121,27 @@ const emailPasswdLogin = () => {
           border-gray-408 rounded-md focus:ring-1 ring-primary focus:border-0">
         </div>
 
-          <button type="submit" class="w-full bg-primary p-1 px-3 rounded-md text-white">Log in</button>
+          <button type="submit" class="w-full bg-primary p-1 px-3 rounded-md text-white">
+            Log in
+          </button>
+
         <div>
           <div class="flex items-center space-x-3">
             <div class="w-full h-[2px] bg-gray-300"></div>
             <p class="shrink-0">Or Continue with</p>
             <div class="w-full h-[2px] bg-gray-300"></div>
           </div>
-          <div class="flex item-center justify-evenly">
-            <div class="flex items-center
+
+          <div class="flex item-center justify-evenly my-5">
+
+            <div @click="googleSignIn" class="flex items-center
           space-x-2
           border border-gray-400 p-3 rounded-md
-          justify-center">
+          justify-center cursor-pointer">
               <FontAwesomeIcon :icon="['fab', 'google']" class="w-6 h-6 text-primary"/>
               <p>Google</p>
             </div>
-            <div class="flex items-center
+            <div @click="githubSignIn" class="flex items-center
           space-x-2
           border border-gray-400 p-3 rounded-md
           justify-center">
@@ -118,7 +156,6 @@ const emailPasswdLogin = () => {
               <p>Twitter</p>
             </div>
           </div>
-
 
         </div>
 
