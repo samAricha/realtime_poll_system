@@ -1,7 +1,49 @@
 <script setup>
-import GoogleSvg from "@/components/icons/GoogleSvg.vue";
-import GitHubSvg from "@/components/icons/GitHubSvg.vue";
-import TwitterSvg from "@/components/icons/TwitterSvg.vue";
+import { auth } from "@/firebaseConfig";
+import {useRouter} from "vue-router";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {ref} from "vue";
+
+
+//credentials
+const formDetails = ref({
+  email: '',
+  password: ''
+})
+
+const router = useRouter()
+
+
+//methods
+const registerUserWithEmailPasswd = () => {
+
+  createUserWithEmailAndPassword(
+      auth,
+      formDetails.value.email,
+      formDetails.value.password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        formDetails.value = {
+          email: '',
+          password: ''
+        }
+        alert(user+" registered")
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        alert(errorCode +" : "+ errorMessage)
+        // ..
+      });
+
+}
+
+
+
+
+
 </script>
 
 <template>
@@ -19,22 +61,29 @@ import TwitterSvg from "@/components/icons/TwitterSvg.vue";
           </RouterLink>
         </p>
       </div>
-      <form class="mx-auto max-w-md p-4 space-y-2
+      <form @submit.prevent = registerUserWithEmailPasswd
+            class="mx-auto max-w-md p-4 space-y-2
       border-t-2 border border-t-primary
       rounded-md my-10">
         <div class="space-y-2 my-2 ">
           <label class="block">Email</label>
-          <input type="text" class="w-full focus:outline-none p-2 border
-          border-gray-408 rounded-md focus:ring-1 ring-primary focus:border-0">
+          <input type="text"
+                 v-model="formDetails.email"
+                 class="w-full focus:outline-none p-2 border
+                  border-gray-408 rounded-md focus:ring-1 ring-primary focus:border-0">
         </div>
 
         <div class="space-y-2 my-1 ">
           <label class="block">Password</label>
-          <input type="text" class="w-full focus:outline-none p-2 border
-          border-gray-408 rounded-md focus:ring-1 ring-primary focus:border-0">
+          <input type="password"
+                 v-model="formDetails.password"
+                 class="w-full focus:outline-none p-2 border
+                  border-gray-408 rounded-md focus:ring-1 ring-primary focus:border-0">
         </div>
-
-        <button class="w-full bg-primary p-1 px-3 rounded-md text-white">Sign up</button>
+          <button type="submit"
+                  class="w-full bg-primary p-1 px-3 rounded-md text-white">
+            Sign up
+          </button>
         <div>
           <div class="flex items-center space-x-2">
             <div class="w-full h-[2px] bg-gray-300"></div>
@@ -46,19 +95,22 @@ import TwitterSvg from "@/components/icons/TwitterSvg.vue";
           space-x-2
           border border-gray-400 p-3 rounded-md
           justify-center">
-              <GoogleSvg/><p>Google</p>
+              <FontAwesomeIcon :icon="['fab','google']" class="w-6 h-6 text-primary"/>
+              <p>Google</p>
             </div>
             <div class="flex items-center
           space-x-2
           border border-gray-400 p-3 rounded-md
           justify-center">
-              <GitHubSvg/><p>GitHub</p>
+              <FontAwesomeIcon :icon="['fab','github']" class="w-6 h-6 text-primary"/>
+              <p>GitHub</p>
             </div>
             <div class="flex items-center
           space-x-2
           border border-gray-400 p-3 rounded-md
           justify-center">
-              <TwitterSvg/> <p>Twitter</p>
+              <FontAwesomeIcon :icon="['fab','twitter']" class="w-6 h-6 text-primary"/>
+              <p>Twitter</p>
             </div>
           </div>
 
