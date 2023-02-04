@@ -4,7 +4,8 @@ import {useRouter} from "vue-router";
 import { createUserWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
-  GithubAuthProvider} from "firebase/auth";
+  GithubAuthProvider,
+  TwitterAuthProvider} from "firebase/auth";
 import {ref} from "vue";
 
 
@@ -17,6 +18,7 @@ const formDetails = ref({
 const router = useRouter()
 const googleProvider = new GoogleAuthProvider()
 const githubProvider = new GithubAuthProvider()
+const twitterProvider = new TwitterAuthProvider()
 
 
 //methods
@@ -84,6 +86,19 @@ const githubSignIn = () => {
 }
 
 //sign-up with twitter
+const twitterSignIn = () => {
+  signInWithPopup(auth, twitterProvider)
+      .then(() => {
+
+        router.push({
+          path: '/create-poll'
+        })
+
+      })
+      .catch(error => {
+        console.log(error.message)
+      })
+}
 
 
 
@@ -156,7 +171,8 @@ const githubSignIn = () => {
               <p>GitHub</p>
             </div>
 
-            <div class="flex items-center
+            <div @click="twitterSignIn"
+                class="flex items-center
               space-x-2
               border border-gray-400 p-3 rounded-md
               justify-center cursor-pointer">

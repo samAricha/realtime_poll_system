@@ -4,7 +4,8 @@ import { auth } from "@/firebaseConfig";
 import { signInWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
-  GithubAuthProvider} from "firebase/auth";
+  GithubAuthProvider,
+  TwitterAuthProvider} from "firebase/auth";
 import { ref } from "vue";
 import {useRouter} from "vue-router";
 
@@ -12,7 +13,8 @@ import {useRouter} from "vue-router";
 const router = useRouter()
 const googleProvider = new GoogleAuthProvider()
 const githubProvider = new GithubAuthProvider()
-
+const twitterProvider = new TwitterAuthProvider()
+console.log(auth.currentUser)
 const formDetails = ref({
   email: '',
   password: ''
@@ -82,6 +84,20 @@ const githubSignIn = () => {
 
 
 //log-in with twitter
+const twitterSignIn = () => {
+  signInWithPopup(auth, twitterProvider)
+      .then(() => {
+
+        router.push({
+          path: '/create-poll'
+        })
+
+      })
+      .catch(error => {
+        console.log(error.message)
+      })
+}
+
 
 
 </script>
@@ -144,14 +160,14 @@ const githubSignIn = () => {
             <div @click="githubSignIn" class="flex items-center
           space-x-2
           border border-gray-400 p-3 rounded-md
-          justify-center">
+          justify-center cursor-pointer">
               <FontAwesomeIcon :icon="['fab', 'github']" class="w-6 h-6 text-primary"/>
               <p>GitHub</p>
             </div>
-            <div class="flex items-center
+            <div @click="twitterSignIn" class="flex items-center
           space-x-2
           border border-gray-400 p-3 rounded-md
-          justify-center">
+          justify-center cursor-pointer">
               <FontAwesomeIcon :icon="['fab','twitter']" class="w-6 h-6 text-primary"/>
               <p>Twitter</p>
             </div>
