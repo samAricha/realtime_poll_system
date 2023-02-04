@@ -1,7 +1,8 @@
 <script setup>
 import { auth } from "@/firebaseConfig";
 import {useRouter} from "vue-router";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword,
+signInWithPopup} from "firebase/auth";
 import {ref} from "vue";
 
 
@@ -22,23 +23,46 @@ const registerUserWithEmailPasswd = () => {
       formDetails.value.email,
       formDetails.value.password)
       .then((userCredential) => {
+
         // Signed in
         const user = userCredential.user;
         formDetails.value = {
           email: '',
           password: ''
         }
+
         alert(user+" registered")
-        // ...
+
+        router.push({
+          path: '/create-poll'
+        })
+
       })
       .catch((error) => {
+
         const errorCode = error.code;
         const errorMessage = error.message;
         alert(errorCode +" : "+ errorMessage)
-        // ..
+
       });
 
 }
+
+//sign-up with google
+const googleSignIn = () => {
+  signInWithPopup(auth, provider)
+      .then(() => {
+        router.push({
+          path: '/create-poll'
+        })
+      })
+      .catch(error => {
+        console.log(error.message)
+      })
+}
+
+//sign-pu with github
+//sign-pu with twitter
 
 
 
@@ -90,25 +114,25 @@ const registerUserWithEmailPasswd = () => {
             <p class="shrink-0">Or Continue with</p>
             <div class="w-full h-[2px] bg-gray-300"></div>
           </div>
-          <div class="flex item-center justify-evenly">
-            <div class="flex items-center
-          space-x-2
-          border border-gray-400 p-3 rounded-md
-          justify-center">
+          <div class="flex items-center justify-evenly my-5">
+            <div @click="googleSignIn" class="flex items-center
+              space-x-2
+              border border-gray-400 p-3 rounded-md
+              justify-center">
               <FontAwesomeIcon :icon="['fab','google']" class="w-6 h-6 text-primary"/>
               <p>Google</p>
             </div>
             <div class="flex items-center
-          space-x-2
-          border border-gray-400 p-3 rounded-md
-          justify-center">
+              space-x-2
+              border border-gray-400 p-3 rounded-md
+              justify-center">
               <FontAwesomeIcon :icon="['fab','github']" class="w-6 h-6 text-primary"/>
               <p>GitHub</p>
             </div>
             <div class="flex items-center
-          space-x-2
-          border border-gray-400 p-3 rounded-md
-          justify-center">
+              space-x-2
+              border border-gray-400 p-3 rounded-md
+              justify-center">
               <FontAwesomeIcon :icon="['fab','twitter']" class="w-6 h-6 text-primary"/>
               <p>Twitter</p>
             </div>

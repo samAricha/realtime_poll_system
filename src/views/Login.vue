@@ -3,36 +3,52 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import { auth } from "@/firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { ref } from "vue";
+import {useRouter} from "vue-router";
 
 //credentials
+const router = useRouter()
 const formDetails = ref({
   email: '',
   password: ''
 })
 
-//methods
+//METHODS
+//sign-in with email and password
 const emailPasswdLogin = () => {
+
   signInWithEmailAndPassword(
       auth,
       formDetails.value.email,
       formDetails.value.password)
       .then((userCredential) => {
+
         // Signed in
         const user = userCredential.user
         formDetails.value = {
           email: '',
           password: ''
         }
+
         alert(user+" logged in")
-        // ...
+
+        router.push({
+          path: '/create-poll'
+        })
+
       })
       .catch((error) => {
+
         const errorCode = error.code;
         const errorMessage = error.message;
         alert(errorMessage)
-        // ..
-      });
+
+      }
+      );
 }
+
+//log-in with google
+//log-in with github
+//log-in with twitter
 
 
 </script>
