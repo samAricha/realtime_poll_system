@@ -1,13 +1,17 @@
 <script setup>
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import { auth } from "@/firebaseConfig";
+
 import { signInWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
   GithubAuthProvider,
   TwitterAuthProvider} from "firebase/auth";
-import { ref } from "vue";
+
+import { ref, computed, onBeforeMount } from "vue";
 import {useRouter} from "vue-router";
+
+
 
 //credentials
 const router = useRouter()
@@ -18,6 +22,21 @@ console.log(auth.currentUser)
 const formDetails = ref({
   email: '',
   password: ''
+})
+
+
+const user = computed(() => {
+  return auth.currentUser
+})
+
+onBeforeMount(() => {
+
+  if(auth.currentUser) {
+
+    router.push({  path: '/create-poll' })
+
+  }
+
 })
 
 //METHODS

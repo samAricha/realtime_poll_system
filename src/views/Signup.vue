@@ -6,8 +6,18 @@ import { createUserWithEmailAndPassword,
   GoogleAuthProvider,
   GithubAuthProvider,
   TwitterAuthProvider} from "firebase/auth";
-import {ref} from "vue";
+import {ref, computed, onBeforeMount} from "vue";
 
+
+const user = computed(() => {
+  return auth.currentUser
+})
+
+onBeforeMount(() => {
+  if (auth.currentUser){
+    router.push({path: '/create-poll'})
+  }
+})
 
 //credentials
 const formDetails = ref({
